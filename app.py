@@ -316,7 +316,7 @@ elif selection == "Prediction":
 
     with col2:
         def load_mri_model():
-          return load_model("final_model_best_3.keras")  
+          return tf.keras.models.load_model("final_model_best_3.keras") 
  
         
         mri_model = load_mri_model()
