@@ -3,9 +3,10 @@ streamlit-option-menu
 numpy==1.23.5
 pandas
 scikit-learn==1.2.2
-tensorflow-cpu==2.12.0
+tensorflow-cpu==2.11.0
 joblib
 scipy
 seaborn
 nibabel
-imbalanced-learn
+imbalanced-learn==0.10.1
+
