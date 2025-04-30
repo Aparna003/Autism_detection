@@ -5,7 +5,8 @@ pandas
 scikit-learn
 matplotlib
 seaborn
-tensorflow
+tensorflow-cpu
 joblib
 scipy
 nibabel
+imbalanced-learn
