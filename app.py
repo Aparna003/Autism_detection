@@ -299,18 +299,26 @@ elif selection == "Prediction":
         st.subheader("📊 Behavioral Model Prediction")
 
         if st.button("Predict results from screening input"):
-            if age >= 18:
+           if age >= 18:
                 prediction = model_adult.predict(input_df)[0]
-                proba = model_adult.predict_proba(input_df)[0][1]
+                proba_all = model_adult.predict_proba(input_df)[0]
                 model_type = "Adult"
-            else:
+           else:
                 prediction = model_child.predict(input_df)[0]
-                proba = model_child.predict_proba(input_df)[0][1]
+                proba_all = model_child.predict_proba(input_df)[0]
                 model_type = "Child"
 
-            label = "YES (Likely Autism)" if prediction == 1 else "NO (Unlikely Autism)"
-            st.success(f"Prediction using {model_type} model: **{label}**")
-            st.info(f"Prediction confidence: **{proba:.2f}**")
+            # Assign label and confidence based on predicted class
+           if prediction == 1:
+                label = "YES (Likely Autism)"
+                confidence = proba_all[1]  # probability of class 1 (ASD)
+           else:
+                label = "NO (Unlikely Autism)"
+                confidence = proba_all[0]  # probability of class 0 (non-ASD)
+
+            # label = "YES (Likely Autism)" if prediction == 1 else "NO (Unlikely Autism)"
+           st.success(f"Prediction using {model_type} model: **{label}**")
+           st.info(f"Prediction confidence: **{confidence:.2f}**")
 
 
 
