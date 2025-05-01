@@ -57,7 +57,8 @@ Interactive visualizations of autism patterns by age, gender, country, and ethni
 
 By blending clinical insight with cutting-edge AI, we aim to contribute to more objective, scalable, and early detection strategies for autism. Dive in to explore the data, models, and discoveries.
     
-
+---
+             
 ## Our Approach
 
 We developed two complementary pipelines for ASD detection:
@@ -68,7 +69,6 @@ A deep learning model was trained on 3D MRI scans from the ABIDE dataset. Advanc
 **Behavioral Screening-Based Detection**:  
 We also built machine learning pipelines based on structured screening data collected from children and adults. This tabular data included features like age, gender, ethnicity, and symptom scores. Models such as Random Forest, Logistic Regression, and XGBoost were trained with preprocessing steps like missing value imputation, SMOTE-based oversampling to handle class imbalance, and L1-based feature selection to enhance model generalizability.
 
-Both pipelines were embedded into an interactive Streamlit application, allowing users to either upload MRI scans for deep learning prediction or input behavioral responses for a machine learning-based assessment. The platform also features visual dashboards analyzing autism trends by demographic factors like gender, country, and ethnicity.
 
 ---
 
@@ -314,60 +314,60 @@ elif selection == "Prediction":
 
 
 
-    with col2:
-        def load_mri_model():
-          return tf.keras.models.load_model("final_model_best_3.keras") 
+    # with col2:
+        # def load_mri_model():
+        #   return tf.keras.models.load_model("final_model_best_rewrite.keras") 
  
         
-        mri_model = load_mri_model()
+        # mri_model = load_mri_model()
 
-        # ✅ Streamlit UI for MRI prediction
-        st.subheader("🧠 MRI-Based Model Prediction")
-        uploaded_file = st.file_uploader("Upload a 3D MRI Scan (.nii or .nii.gz)", type=["nii", "nii.gz"])
+        # # ✅ Streamlit UI for MRI prediction
+        # st.subheader("🧠 MRI-Based Model Prediction")
+        # uploaded_file = st.file_uploader("Upload a 3D MRI Scan (.nii or .nii.gz)", type=["nii", "nii.gz"])
  
 
-        if uploaded_file:
-            st.write("📂 File received:", uploaded_file.name)
+        # if uploaded_file:
+        #     st.write("📂 File received:", uploaded_file.name)
 
-            if st.button("Predict from MRI"):
-               try:
-                    # ✅ Get the correct extension
-                    file_extension = ".nii.gz" if uploaded_file.name.endswith(".nii.gz") else ".nii"
+        #     if st.button("Predict from MRI"):
+        #        try:
+        #             # ✅ Get the correct extension
+        #             file_extension = ".nii.gz" if uploaded_file.name.endswith(".nii.gz") else ".nii"
 
-                    # ✅ Save to temp file with the right extension
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as tmp_file:
-                        tmp_file.write(uploaded_file.read())
-                        tmp_path = tmp_file.name
+        #             # ✅ Save to temp file with the right extension
+        #             with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as tmp_file:
+        #                 tmp_file.write(uploaded_file.read())
+        #                 tmp_path = tmp_file.name
 
-                    # ✅ Now load without confusion
-                    img = nib.load(tmp_path)
-                    data = img.get_fdata()
+        #             # ✅ Now load without confusion
+        #             img = nib.load(tmp_path)
+        #             data = img.get_fdata()
 
-                    # Normalize voxel intensities [0,1]
-                    data = (data - np.min(data)) / (np.max(data) - np.min(data) + 1e-6)
+        #             # Normalize voxel intensities [0,1]
+        #             data = (data - np.min(data)) / (np.max(data) - np.min(data) + 1e-6)
 
-                    # Resize MRI volume to (80, 128, 128)
-                    target_shape = (80, 128, 128)
-                    zoom_factors = (
-                        target_shape[0] / data.shape[0],
-                        target_shape[1] / data.shape[1],
-                        target_shape[2] / data.shape[2],
-                    )
-                    data_resized = scipy.ndimage.zoom(data, zoom=zoom_factors, order=1)
+        #             # Resize MRI volume to (80, 128, 128)
+        #             target_shape = (80, 128, 128)
+        #             zoom_factors = (
+        #                 target_shape[0] / data.shape[0],
+        #                 target_shape[1] / data.shape[1],
+        #                 target_shape[2] / data.shape[2],
+        #             )
+        #             data_resized = scipy.ndimage.zoom(data, zoom=zoom_factors, order=1)
 
-                    # Prepare input for model
-                    data_final = np.expand_dims(data_resized, axis=(0, -1)).astype(np.float32)  # Shape: (1, 80, 128, 128, 1)
+        #             # Prepare input for model
+        #             data_final = np.expand_dims(data_resized, axis=(0, -1)).astype(np.float32)  # Shape: (1, 80, 128, 128, 1)
 
-                    # Predict
-                    prediction = mri_model.predict(data_final)[0][0]
-                    label = "YES (Likely Autism)" if prediction > 0.5 else "NO (Unlikely Autism)"
+        #             # Predict
+        #             prediction = mri_model.predict(data_final)[0][0]
+        #             label = "YES (Likely Autism)" if prediction > 0.5 else "NO (Unlikely Autism)"
 
-                    # Display result
-                    st.success(f"MRI Prediction: **{label}**")
-                    st.info(f"Prediction confidence: **{prediction:.2f}**")
+        #             # Display result
+        #             st.success(f"MRI Prediction: **{label}**")
+        #             st.info(f"Prediction confidence: **{prediction:.2f}**")
 
-               except Exception as e:
-                    st.error(f"❌ Error during MRI prediction: {e}")
+        #        except Exception as e:
+        #             st.error(f"❌ Error during MRI prediction: {e}")
 
-        else:
-            st.info("Please upload a 3D MRI scan to proceed.")
+        # else:
+        #     st.info("Please upload a 3D MRI scan to proceed.")
