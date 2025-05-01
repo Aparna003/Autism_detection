@@ -1,0 +1,12 @@
+!/bin/bash
+
+# Activate Python environment and start backend
+source /home/shrishailterniofficial/autism-env/bin/activate
+cd /home/shrishailterniofficial/autism-node-server/autism-insight-web/server
+nohup python3 app.py > backend.log 2>&1 &
+
+# Start frontend (with --host)
+cd /home/shrishailterniofficial/autism-node-server/autism-insight-web
+nohup npm run dev -- --host > frontend.log 2>&1 &
+
+echo "✅ Both frontend and backend started!"
